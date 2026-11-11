@@ -1,6 +1,5 @@
 # 大原始数据文件
-hr_compliance_rag/data/raw/laws.json
-hr_compliance_rag/data/raw/laws.json.zip
+hr_compliance_rag/data
 
 # python缓存
 __pycache__/
