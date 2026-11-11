@@ -1,0 +1,16 @@
+# 大原始数据文件
+hr_compliance_rag/data/raw/laws.json
+hr_compliance_rag/data/raw/laws.json.zip
+
+# python缓存
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# 向量索引
+hr_compliance_rag/vector_index/
+
+# 环境密钥
+.env
+*.log

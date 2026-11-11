@@ -1,0 +1,73 @@
+"""
+索引构建模块 - 负责向量化和FAISS索引构建/持久化
+
+改自 C8/rag_modules/index_construction.py，逻辑基本不变。
+"""
+
+import logging
+from typing import List
+from pathlib import Path
+
+from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_community.vectorstores import FAISS
+from langchain_core.documents import Document
+
+logger = logging.getLogger(__name__)
+
+
+class IndexingModule:
+    """索引构建模块 - 向量化与索引构建"""
+
+    def __init__(self, model_name: str = "BAAI/bge-small-zh-v1.5", index_save_path: str = "./vector_index"):
+        self.model_name = model_name
+        self.index_save_path = index_save_path
+        self.embeddings = None
+        self.vectorstore = None
+        self.setup_embeddings()
+
+    def setup_embeddings(self):
+        logger.info(f"正在初始化嵌入模型: {self.model_name}")
+        self.embeddings = HuggingFaceEmbeddings(
+            model_name=self.model_name,
+            model_kwargs={'device': 'cpu'},
+            encode_kwargs={'normalize_embeddings': True}
+        )
+        logger.info("嵌入模型初始化完成")
+
+    def build_vector_index(self, chunks: List[Document]) -> FAISS:
+        logger.info("正在构建FAISS向量索引...")
+        if not chunks:
+            raise ValueError("文档块列表不能为空")
+        self.vectorstore = FAISS.from_documents(documents=chunks, embedding=self.embeddings)
+        logger.info(f"向量索引构建完成，包含 {len(chunks)} 个向量")
+        return self.vectorstore
+
+    def save_index(self):
+        if not self.vectorstore:
+            raise ValueError("请先构建向量索引")
+        Path(self.index_save_path).mkdir(parents=True, exist_ok=True)
+        self.vectorstore.save_local(self.index_save_path)
+        logger.info(f"向量索引已保存到: {self.index_save_path}")
+
+    def load_index(self):
+        if not self.embeddings:
+            self.setup_embeddings()
+        if not Path(self.index_save_path).exists():
+            logger.info(f"索引路径不存在: {self.index_save_path}，将构建新索引")
+            return None
+        try:
+            self.vectorstore = FAISS.load_local(
+                self.index_save_path,
+                self.embeddings,
+                allow_dangerous_deserialization=True
+            )
+            logger.info(f"向量索引已从 {self.index_save_path} 加载")
+            return self.vectorstore
+        except Exception as e:
+            logger.warning(f"加载向量索引失败: {e}，将构建新索引")
+            return None
+
+    def similarity_search(self, query: str, k: int = 5) -> List[Document]:
+        if not self.vectorstore:
+            raise ValueError("请先构建或加载向量索引")
+        return self.vectorstore.similarity_search(query, k=k)

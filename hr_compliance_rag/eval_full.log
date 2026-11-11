@@ -1,0 +1,322 @@
+D:\miniconda\envs\all-in-rag\Lib\site-packages\jieba\_compat.py:18: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+🚀 正在初始化HR合规RAG系统...
+2026-11-01 18:15:03,223 - kb_modules.indexing - INFO - 正在初始化嵌入模型: BAAI/bge-small-zh-v1.5
+2026-11-01 18:15:08,761 - sentence_transformers.SentenceTransformer - INFO - Load pretrained SentenceTransformer: BAAI/bge-small-zh-v1.5
+2026-11-01 18:15:16,562 - kb_modules.indexing - INFO - 嵌入模型初始化完成
+2026-11-01 18:15:16,562 - kb_modules.dialogue - INFO - 正在初始化对话LLM: kimi-k2.6
+2026-11-01 18:15:19,442 - kb_modules.dialogue - INFO - 对话LLM初始化完成
+2026-11-01 18:15:19,442 - kb_modules.generation - INFO - 正在初始化生成LLM: kimi-k2.6
+2026-11-01 18:15:19,495 - kb_modules.generation - INFO - 生成LLM初始化完成
+✅ 系统初始化完成！
+
+正在构建知识库...
+加载法规文档...
+2026-11-01 18:15:19,495 - kb_modules.ingestion - INFO - 正在从 ./data/laws 加载法规文档...
+2026-11-01 18:15:19,503 - kb_modules.ingestion - INFO - 成功加载 28 部法规
+按法条结构分块...
+2026-11-01 18:15:19,503 - kb_modules.ingestion - INFO - 正在按法条结构分块...
+2026-11-01 18:15:19,536 - kb_modules.ingestion - INFO - 分块完成，共生成 1217 个法条块
+2026-11-01 18:15:19,541 - faiss.loader - INFO - Loading faiss with AVX2 support.
+2026-11-01 18:15:19,541 - faiss.loader - INFO - Could not load library with AVX2 support due to:
+ModuleNotFoundError("No module named 'faiss.swigfaiss_avx2'")
+2026-11-01 18:15:19,541 - faiss.loader - INFO - Loading faiss.
+2026-11-01 18:15:19,566 - faiss.loader - INFO - Successfully loaded faiss.
+2026-11-01 18:15:19,586 - kb_modules.indexing - INFO - 向量索引已从 ./vector_index 加载
+✅ 成功加载已保存的向量索引！
+初始化检索优化...
+2026-11-01 18:15:19,586 - kb_modules.retrieval - INFO - 正在设置检索器...
+Building prefix dict from the default dictionary ...
+2026-11-01 18:15:19,589 - jieba - DEBUG - Building prefix dict from the default dictionary ...
+Loading model from cache C:\Users\ytnie\AppData\Local\Temp\jieba.cache
+2026-11-01 18:15:19,589 - jieba - DEBUG - Loading model from cache C:\Users\ytnie\AppData\Local\Temp\jieba.cache
+Loading model cost 0.666 seconds.
+2026-11-01 18:15:20,255 - jieba - DEBUG - Loading model cost 0.666 seconds.
+Prefix dict has been built successfully.
+2026-11-01 18:15:20,255 - jieba - DEBUG - Prefix dict has been built successfully.
+2026-11-01 18:15:20,691 - kb_modules.retrieval - INFO - 检索器设置完成
+
+📊 知识库统计:
+   法规总数: 28
+   法条块数: 1217
+   子领域分布: {'劳动争议': 5, '劳动合同': 3, '女职工未成年工保护': 2, '就业促进': 3, '工会集体合同': 2, '社会保险': 4, '工伤职业病': 3, '综合': 1, '工资福利': 2, '工时休假': 2, '退休养老': 1}
+   效力级别分布: {'法律': 8, '行政法规': 15, '司法解释': 5}
+   平均块长: 120 字
+✅ 知识库构建完成！
+
+========================================================================
+P1 SMOKE 评测 —— 20 题 (ground-truth 存在性 / 检索召回 / 引用准确率)
+========================================================================
+2026-11-01 18:15:22,526 - kb_modules.retrieval - INFO - RRF重排完成: 向量10 + BM2510 -> 合并12个法条块
+
+❓ 用户问题: 试用期最长多久?  [角色: employee]
+2026-11-01 18:15:31,462 - httpx - INFO - HTTP Request: POST https://api.moonshot.cn/v1/chat/completions "HTTP/1.1 200 OK"
+🎯 意图类型: detail
+🤖 智能分析查询...
+2026-11-01 18:15:36,960 - httpx - INFO - HTTP Request: POST https://api.moonshot.cn/v1/chat/completions "HTTP/1.1 200 OK"
+2026-11-01 18:15:36,965 - kb_modules.dialogue - INFO - 查询无需重写: '试用期最长多久?'
+2026-11-01 18:15:36,979 - kb_modules.retrieval - INFO - RRF重排完成: 向量10 + BM2510 -> 合并12个法条块
+🔍 命中 5 条法规: 《中华人民共和国劳动法》第二十一条, 《中华人民共和国劳动合同法》第十九条, 《中华人民共和国劳动合同法》第八十三条, 《中华人民共和国社会保险法》第四十六条, 《中华人民共和国劳动合同法》第七十条
+✍️ 生成合规回答...
+2026-11-01 18:16:17,879 - httpx - INFO - HTTP Request: POST https://api.moonshot.cn/v1/chat/completions "HTTP/1.1 200 OK"
+[ 1] GT✓ 检索✓(第十九条) 引用✓(第十九条)  —— 试用期最长多久?
+2026-11-01 18:16:37,909 - kb_modules.retrieval - INFO - RRF重排完成: 向量10 + BM2510 -> 合并15个法条块
+
+❓ 用户问题: 经济补偿金怎么计算?  [角色: employee]
+2026-11-01 18:16:44,337 - httpx - INFO - HTTP Request: POST https://api.moonshot.cn/v1/chat/completions "HTTP/1.1 200 OK"
+🎯 意图类型: detail
+🤖 智能分析查询...
+2026-11-01 18:16:50,366 - httpx - INFO - HTTP Request: POST https://api.moonshot.cn/v1/chat/completions "HTTP/1.1 200 OK"
+2026-11-01 18:16:50,367 - kb_modules.dialogue - INFO - 查询无需重写: '经济补偿金怎么计算?'
+2026-11-01 18:16:50,383 - kb_modules.retrieval - INFO - RRF重排完成: 向量10 + BM2510 -> 合并15个法条块
+🔍 命中 5 条法规: 《中华人民共和国劳动合同法》第四十七条, 《中华人民共和国劳动合同法实施条例》第二十五条, 《中华人民共和国劳动合同法》第九十七条, 《中华人民共和国劳动合同法实施条例》第二十七条, 《劳动保障监察条例》第二十六条
+✍️ 生成合规回答...
+2026-11-01 18:18:03,295 - httpx - INFO - HTTP Request: POST https://api.moonshot.cn/v1/chat/completions "HTTP/1.1 200 OK"
+[ 2] GT✓ 检索✓(第四十七条) 引用✓(第四十七条)  —— 经济补偿金怎么计算?
+2026-11-01 18:18:23,331 - kb_modules.retrieval - INFO - RRF重排完成: 向量10 + BM2510 -> 合并12个法条块
+
+❓ 用户问题: 年休假有几天?  [角色: employee]
+2026-11-01 18:18:28,343 - openai._base_client - INFO - Retrying request to /chat/completions in 0.476255 seconds
+2026-11-01 18:18:36,320 - httpx - INFO - HTTP Request: POST https://api.moonshot.cn/v1/chat/completions "HTTP/1.1 200 OK"
+🎯 意图类型: detail
+🤖 智能分析查询...
+2026-11-01 18:18:50,483 - httpx - INFO - HTTP Request: POST https://api.moonshot.cn/v1/chat/completions "HTTP/1.1 200 OK"
+2026-11-01 18:18:50,483 - kb_modules.dialogue - WARNING - 查询重写返回空/异常('')，回退原查询: '年休假有几天?'
+2026-11-01 18:18:50,497 - kb_modules.retrieval - INFO - RRF重排完成: 向量10 + BM2510 -> 合并12个法条块
+🔍 命中 5 条法规: 《职工带薪年休假条例》第三条, 《职工带薪年休假条例》第二条, 《中华人民共和国劳动法》第四十五条, 《职工带薪年休假条例》第五条, 《职工带薪年休假条例》第四条
+✍️ 生成合规回答...
+2026-11-01 18:19:49,103 - httpx - INFO - HTTP Request: POST https://api.moonshot.cn/v1/chat/completions "HTTP/1.1 200 OK"
+[ 3] GT✓ 检索✓(第三条) 引用✓(第三条)  —— 年休假有几天?
+2026-11-01 18:20:09,136 - kb_modules.retrieval - INFO - RRF重排完成: 向量10 + BM2510 -> 合并16个法条块
+
+❓ 用户问题: 工伤如何认定?  [角色: hr]
+2026-11-01 18:20:31,725 - httpx - INFO - HTTP Request: POST https://api.moonshot.cn/v1/chat/completions "HTTP/1.1 200 OK"
+🎯 意图类型: general
+🤖 智能分析查询...
+2026-11-01 18:20:40,123 - httpx - INFO - HTTP Request: POST https://api.moonshot.cn/v1/chat/completions "HTTP/1.1 200 OK"
+2026-11-01 18:20:40,124 - kb_modules.dialogue - INFO - 查询无需重写: '工伤如何认定?'
+2026-11-01 18:20:40,137 - kb_modules.retrieval - INFO - RRF重排完成: 向量10 + BM2510 -> 合并16个法条块
+🔍 命中 5 条法规: 《工伤保险条例》第十八条, 《工伤保险条例》第二十条, 《中华人民共和国社会保险法》第三十六条, 《工伤保险条例》第十七条, 《工伤保险条例》第十四条
+✍️ 生成合规回答...
+2026-11-01 18:21:42,813 - httpx - INFO - HTTP Request: POST https://api.moonshot.cn/v1/chat/completions "HTTP/1.1 200 OK"
+[ 4] GT✓ 检索✓(第十四条) 引用✓(第十四条)  —— 工伤如何认定?
+2026-11-01 18:22:02,848 - kb_modules.retrieval - INFO - RRF重排完成: 向量10 + BM2510 -> 合并16个法条块
+
+❓ 用户问题: 女职工产假多少天?  [角色: employee]
+2026-11-01 18:22:27,640 - httpx - INFO - HTTP Request: POST https://api.moonshot.cn/v1/chat/completions "HTTP/1.1 200 OK"
+🎯 意图类型: detail
+🤖 智能分析查询...
+2026-11-01 18:22:33,769 - httpx - INFO - HTTP Request: POST https://api.moonshot.cn/v1/chat/completions "HTTP/1.1 200 OK"
+2026-11-01 18:22:33,770 - kb_modules.dialogue - INFO - 查询无需重写: '女职工产假多少天?'
+2026-11-01 18:22:33,785 - kb_modules.retrieval - INFO - RRF重排完成: 向量10 + BM2510 -> 合并16个法条块
+🔍 命中 5 条法规: 《中华人民共和国劳动法》第六十二条, 《女职工劳动保护特别规定》第七条, 《职工带薪年休假条例》第三条, 《女职工劳动保护特别规定》第八条, 《中华人民共和国妇女权益保障法》第四十八条
+✍️ 生成合规回答...
+2026-11-01 18:23:28,651 - httpx - INFO - HTTP Request: POST https://api.moonshot.cn/v1/chat/completions "HTTP/1.1 200 OK"
+[ 5] GT✓ 检索✓(第七条) 引用✓(第七条)  —— 女职工产假多少天?
+2026-11-01 18:23:48,684 - kb_modules.retrieval - INFO - RRF重排完成: 向量10 + BM2510 -> 合并17个法条块
+
+❓ 用户问题: 加班费怎么算?  [角色: employee]
+2026-11-01 18:24:09,346 - httpx - INFO - HTTP Request: POST https://api.moonshot.cn/v1/chat/completions "HTTP/1.1 200 OK"
+🎯 意图类型: detail
+🤖 智能分析查询...
+2026-11-01 18:24:29,078 - httpx - INFO - HTTP Request: POST https://api.moonshot.cn/v1/chat/completions "HTTP/1.1 200 OK"
+2026-11-01 18:24:29,079 - kb_modules.dialogue - INFO - 查询无需重写: '加班费怎么算?'
+2026-11-01 18:24:29,093 - kb_modules.retrieval - INFO - RRF重排完成: 向量10 + BM2510 -> 合并17个法条块
+🔍 命中 5 条法规: 《中华人民共和国劳动合同法》第三十一条, 《中华人民共和国劳动合同法》第八十五条, 《最高人民法院关于审理劳动争议案件适用法律问题的解释（一）》第四十二条, 《关于工资总额组成的规定》第九条, 《中华人民共和国劳动合同法》第六十二条
+✍️ 生成合规回答...
+2026-11-01 18:25:01,315 - httpx - INFO - HTTP Request: POST https://api.moonshot.cn/v1/chat/completions "HTTP/1.1 200 OK"
+[ 6] GT✓ 检索✓(第三十一条) 引用✓(第三十一条)  —— 加班费怎么算?
+2026-11-01 18:25:21,421 - kb_modules.retrieval - INFO - RRF重排完成: 向量10 + BM2510 -> 合并18个法条块
+
+❓ 用户问题: 公司不签劳动合同要付双倍工资吗?  [角色: employee]
+2026-11-01 18:25:31,950 - httpx - INFO - HTTP Request: POST https://api.moonshot.cn/v1/chat/completions "HTTP/1.1 200 OK"
+🎯 意图类型: detail
+🤖 智能分析查询...
+2026-11-01 18:25:43,373 - httpx - INFO - HTTP Request: POST https://api.moonshot.cn/v1/chat/completions "HTTP/1.1 200 OK"
+2026-11-01 18:25:43,374 - kb_modules.dialogue - INFO - 查询无需重写: '公司不签劳动合同要付双倍工资吗?'
+应用过滤条件: {'domain': '劳动合同'}
+2026-11-01 18:25:43,393 - kb_modules.retrieval - INFO - RRF重排完成: 向量10 + BM255 -> 合并13个法条块
+🔍 命中 5 条法规: 《中华人民共和国劳动合同法》第八十二条, 《中华人民共和国劳动合同法实施条例》第六条, 《中华人民共和国劳动合同法》第二十条, 《中华人民共和国劳动合同法实施条例》第三十四条, 《中华人民共和国劳动合同法》第十一条
+✍️ 生成合规回答...
+2026-11-01 18:26:33,884 - httpx - INFO - HTTP Request: POST https://api.moonshot.cn/v1/chat/completions "HTTP/1.1 200 OK"
+[ 7] GT✓ 检索✓(第八十二条) 引用✓(第八十二条)  —— 公司不签劳动合同要付双倍工资吗?
+2026-11-01 18:26:53,911 - kb_modules.retrieval - INFO - RRF重排完成: 向量10 + BM2510 -> 合并15个法条块
+
+❓ 用户问题: 员工辞职要提前多久通知?  [角色: employee]
+2026-11-01 18:27:10,954 - httpx - INFO - HTTP Request: POST https://api.moonshot.cn/v1/chat/completions "HTTP/1.1 200 OK"
+🎯 意图类型: detail
+🤖 智能分析查询...
+2026-11-01 18:27:29,416 - httpx - INFO - HTTP Request: POST https://api.moonshot.cn/v1/chat/completions "HTTP/1.1 200 OK"
+2026-11-01 18:27:29,417 - kb_modules.dialogue - WARNING - 查询重写返回空/异常('')，回退原查询: '员工辞职要提前多久通知?'
+2026-11-01 18:27:29,431 - kb_modules.retrieval - INFO - RRF重排完成: 向量10 + BM2510 -> 合并15个法条块
+🔍 命中 5 条法规: 《中华人民共和国劳动合同法》第三十七条, 《中华人民共和国劳动法》第三十一条, 《中华人民共和国劳动合同法》第四十条, 《中华人民共和国劳动法》第二十六条, 《事业单位人事管理条例》第十七条
+✍️ 生成合规回答...
+2026-11-01 18:28:18,890 - httpx - INFO - HTTP Request: POST https://api.moonshot.cn/v1/chat/completions "HTTP/1.1 200 OK"
+[ 8] GT✓ 检索✓(第三十七条) 引用✓(第三十七条)  —— 员工辞职要提前多久通知?
+2026-11-01 18:28:38,918 - kb_modules.retrieval - INFO - RRF重排完成: 向量10 + BM2510 -> 合并13个法条块
+
+❓ 用户问题: 竞业限制期限最长多久?  [角色: legal]
+2026-11-01 18:28:46,887 - httpx - INFO - HTTP Request: POST https://api.moonshot.cn/v1/chat/completions "HTTP/1.1 200 OK"
+🎯 意图类型: detail
+🤖 智能分析查询...
+2026-11-01 18:28:52,476 - httpx - INFO - HTTP Request: POST https://api.moonshot.cn/v1/chat/completions "HTTP/1.1 200 OK"
+2026-11-01 18:28:52,477 - kb_modules.dialogue - INFO - 查询无需重写: '竞业限制期限最长多久?'
+2026-11-01 18:28:52,493 - kb_modules.retrieval - INFO - RRF重排完成: 向量10 + BM2510 -> 合并13个法条块
+🔍 命中 5 条法规: 《中华人民共和国劳动合同法》第二十四条, 《中华人民共和国社会保险法》第四十六条, 《最高人民法院关于审理劳动争议案件适用法律问题的解释（一）》第三十九条, 《失业保险条例》第十七条, 《最高人民法院关于审理劳动争议案件适用法律问题的解释（一）》第四十条
+✍️ 生成合规回答...
+2026-11-01 18:29:54,024 - httpx - INFO - HTTP Request: POST https://api.moonshot.cn/v1/chat/completions "HTTP/1.1 200 OK"
+[ 9] GT✓ 检索✓(第二十四条) 引用✓(第二十四条)  —— 竞业限制期限最长多久?
+2026-11-01 18:30:14,060 - kb_modules.retrieval - INFO - RRF重排完成: 向量10 + BM2510 -> 合并12个法条块
+
+❓ 用户问题: 什么情况下应当订立无固定期限劳动合同?  [角色: hr]
+2026-11-01 18:30:32,862 - httpx - INFO - HTTP Request: POST https://api.moonshot.cn/v1/chat/completions "HTTP/1.1 200 OK"
+🎯 意图类型: general
+🤖 智能分析查询...
+2026-11-01 18:30:39,469 - httpx - INFO - HTTP Request: POST https://api.moonshot.cn/v1/chat/completions "HTTP/1.1 200 OK"
+2026-11-01 18:30:39,475 - kb_modules.dialogue - INFO - 查询无需重写: '什么情况下应当订立无固定期限劳动合同?'
+应用过滤条件: {'domain': '劳动合同'}
+2026-11-01 18:30:39,491 - kb_modules.retrieval - INFO - RRF重排完成: 向量10 + BM259 -> 合并12个法条块
+🔍 命中 5 条法规: 《中华人民共和国劳动法》第二十条, 《中华人民共和国劳动合同法》第十四条, 《中华人民共和国劳动合同法》第十二条, 《中华人民共和国劳动合同法》第八十二条, 《中华人民共和国劳动合同法》第十三条
+✍️ 生成合规回答...
+2026-11-01 18:31:15,960 - httpx - INFO - HTTP Request: POST https://api.moonshot.cn/v1/chat/completions "HTTP/1.1 200 OK"
+[10] GT✓ 检索✓(第十四条) 引用✓(第十四条)  —— 什么情况下应当订立无固定期限劳动合同?
+2026-11-01 18:31:35,980 - kb_modules.retrieval - INFO - RRF重排完成: 向量10 + BM2510 -> 合并14个法条块
+
+❓ 用户问题: 用人单位可以单方解除劳动合同的情形有哪些?  [角色: hr]
+2026-11-01 18:31:43,615 - httpx - INFO - HTTP Request: POST https://api.moonshot.cn/v1/chat/completions "HTTP/1.1 200 OK"
+🎯 意图类型: list
+应用过滤条件: {'domain': '劳动合同'}
+2026-11-01 18:31:43,635 - kb_modules.retrieval - INFO - RRF重排完成: 向量10 + BM259 -> 合并13个法条块
+🔍 命中 5 条法规: 《中华人民共和国劳动合同法》第三十八条, 《中华人民共和国劳动合同法》第三十九条, 《中华人民共和国劳动法》第三十二条, 《中华人民共和国劳动合同法》第四十六条, 《中华人民共和国劳动法》第二十五条
+📋 生成条款清单...
+[11] GT✓ 检索✓(第三十九条) 引用✓(第三十九条)  —— 用人单位可以单方解除劳动合同的情形有哪些?
+2026-11-01 18:32:03,653 - kb_modules.retrieval - INFO - RRF重排完成: 向量10 + BM2510 -> 合并16个法条块
+
+❓ 用户问题: 最低工资标准由谁规定?  [角色: employee]
+2026-11-01 18:32:17,250 - httpx - INFO - HTTP Request: POST https://api.moonshot.cn/v1/chat/completions "HTTP/1.1 200 OK"
+🎯 意图类型: detail
+🤖 智能分析查询...
+2026-11-01 18:32:24,049 - httpx - INFO - HTTP Request: POST https://api.moonshot.cn/v1/chat/completions "HTTP/1.1 200 OK"
+2026-11-01 18:32:24,053 - kb_modules.dialogue - INFO - 查询无需重写: '最低工资标准由谁规定?'
+2026-11-01 18:32:24,068 - kb_modules.retrieval - INFO - RRF重排完成: 向量10 + BM2510 -> 合并16个法条块
+🔍 命中 5 条法规: 《中华人民共和国劳动法》第四十八条, 《失业保险条例》第十八条, 《中华人民共和国劳动合同法》第二十条, 《中华人民共和国劳动合同法实施条例》第十五条, 《中华人民共和国劳动法》第四十九条
+✍️ 生成合规回答...
+2026-11-01 18:32:55,088 - httpx - INFO - HTTP Request: POST https://api.moonshot.cn/v1/chat/completions "HTTP/1.1 200 OK"
+[12] GT✓ 检索✓(第四十八条) 引用✓(第四十八条)  —— 最低工资标准由谁规定?
+2026-11-01 18:33:15,107 - kb_modules.retrieval - INFO - RRF重排完成: 向量10 + BM2510 -> 合并15个法条块
+
+❓ 用户问题: 每天工作时间不超过几小时?  [角色: employee]
+2026-11-01 18:33:24,073 - httpx - INFO - HTTP Request: POST https://api.moonshot.cn/v1/chat/completions "HTTP/1.1 200 OK"
+🎯 意图类型: detail
+🤖 智能分析查询...
+2026-11-01 18:33:32,628 - httpx - INFO - HTTP Request: POST https://api.moonshot.cn/v1/chat/completions "HTTP/1.1 200 OK"
+2026-11-01 18:33:32,630 - kb_modules.dialogue - INFO - 查询无需重写: '每天工作时间不超过几小时?'
+2026-11-01 18:33:32,645 - kb_modules.retrieval - INFO - RRF重排完成: 向量10 + BM2510 -> 合并15个法条块
+🔍 命中 5 条法规: 《中华人民共和国劳动法》第三十六条, 《中华人民共和国劳动合同法》第六十八条, 《中华人民共和国劳动法》第四十一条, 《中华人民共和国劳动法》第四十四条, 《国务院关于职工工作时间的规定》第六条
+✍️ 生成合规回答...
+2026-11-01 18:34:11,254 - httpx - INFO - HTTP Request: POST https://api.moonshot.cn/v1/chat/completions "HTTP/1.1 200 OK"
+[13] GT✓ 检索✓(第三十六条) 引用✓(第三十六条)  —— 每天工作时间不超过几小时?
+2026-11-01 18:34:31,279 - kb_modules.retrieval - INFO - RRF重排完成: 向量10 + BM2510 -> 合并15个法条块
+
+❓ 用户问题: 领取失业保险金需要什么条件?  [角色: employee]
+2026-11-01 18:34:40,883 - httpx - INFO - HTTP Request: POST https://api.moonshot.cn/v1/chat/completions "HTTP/1.1 200 OK"
+🎯 意图类型: detail
+🤖 智能分析查询...
+2026-11-01 18:34:46,331 - httpx - INFO - HTTP Request: POST https://api.moonshot.cn/v1/chat/completions "HTTP/1.1 200 OK"
+2026-11-01 18:34:46,333 - kb_modules.dialogue - INFO - 查询无需重写: '领取失业保险金需要什么条件?'
+2026-11-01 18:34:46,349 - kb_modules.retrieval - INFO - RRF重排完成: 向量10 + BM2510 -> 合并15个法条块
+🔍 命中 5 条法规: 《中华人民共和国社会保险法》第四十五条, 《失业保险条例》第十四条, 《失业保险条例》第十条, 《失业保险条例》第十九条, 《失业保险条例》第十六条
+✍️ 生成合规回答...
+2026-11-01 18:35:26,987 - httpx - INFO - HTTP Request: POST https://api.moonshot.cn/v1/chat/completions "HTTP/1.1 200 OK"
+[14] GT✓ 检索✓(第十四条) 引用✓(第十四条)  —— 领取失业保险金需要什么条件?
+2026-11-01 18:35:47,013 - kb_modules.retrieval - INFO - RRF重排完成: 向量10 + BM2510 -> 合并18个法条块
+
+❓ 用户问题: 劳动争议申请仲裁的时效是多久?  [角色: legal]
+2026-11-01 18:35:55,075 - httpx - INFO - HTTP Request: POST https://api.moonshot.cn/v1/chat/completions "HTTP/1.1 200 OK"
+🎯 意图类型: detail
+🤖 智能分析查询...
+2026-11-01 18:36:12,884 - httpx - INFO - HTTP Request: POST https://api.moonshot.cn/v1/chat/completions "HTTP/1.1 200 OK"
+2026-11-01 18:36:12,887 - kb_modules.dialogue - INFO - 查询无需重写: '劳动争议申请仲裁的时效是多久?'
+应用过滤条件: {'domain': '劳动争议'}
+2026-11-01 18:36:12,904 - kb_modules.retrieval - INFO - RRF重排完成: 向量10 + BM258 -> 合并17个法条块
+🔍 命中 5 条法规: 《中华人民共和国劳动争议调解仲裁法》第二十七条, 《中华人民共和国劳动争议调解仲裁法》第四十七条, 《中华人民共和国劳动争议调解仲裁法》第二十一条, 《中华人民共和国劳动争议调解仲裁法》第二十九条, 《中华人民共和国劳动争议调解仲裁法》第四十三条
+✍️ 生成合规回答...
+2026-11-01 18:36:17,930 - openai._base_client - INFO - Retrying request to /chat/completions in 0.457067 seconds
+2026-11-01 18:37:04,414 - httpx - INFO - HTTP Request: POST https://api.moonshot.cn/v1/chat/completions "HTTP/1.1 200 OK"
+[15] GT✓ 检索✓(第二十七条) 引用✓(第二十七条)  —— 劳动争议申请仲裁的时效是多久?
+2026-11-01 18:37:24,448 - kb_modules.retrieval - INFO - RRF重排完成: 向量10 + BM2510 -> 合并18个法条块
+
+❓ 用户问题: 用人单位必须为员工缴纳社保吗?  [角色: hr]
+2026-11-01 18:37:42,408 - httpx - INFO - HTTP Request: POST https://api.moonshot.cn/v1/chat/completions "HTTP/1.1 200 OK"
+🎯 意图类型: general
+🤖 智能分析查询...
+2026-11-01 18:37:57,974 - httpx - INFO - HTTP Request: POST https://api.moonshot.cn/v1/chat/completions "HTTP/1.1 200 OK"
+2026-11-01 18:37:57,975 - kb_modules.dialogue - WARNING - 查询重写返回空/异常('')，回退原查询: '用人单位必须为员工缴纳社保吗?'
+2026-11-01 18:37:57,990 - kb_modules.retrieval - INFO - RRF重排完成: 向量10 + BM2510 -> 合并18个法条块
+🔍 命中 5 条法规: 《中华人民共和国社会保险法》第六十条, 《中华人民共和国劳动法》第七十二条, 《中华人民共和国职业病防治法》第二十二条, 《中华人民共和国社会保险法》第五十八条, 《中华人民共和国劳动法》第五十四条
+✍️ 生成合规回答...
+2026-11-01 18:38:46,035 - httpx - INFO - HTTP Request: POST https://api.moonshot.cn/v1/chat/completions "HTTP/1.1 200 OK"
+[16] GT✓ 检索✓(第五十八条) 引用✓(第五十八条)  —— 用人单位必须为员工缴纳社保吗?
+2026-11-01 18:39:06,073 - kb_modules.retrieval - INFO - RRF重排完成: 向量10 + BM2510 -> 合并13个法条块
+
+❓ 用户问题: 劳务派遣只能用在什么岗位?  [角色: hr]
+2026-11-01 18:39:27,026 - httpx - INFO - HTTP Request: POST https://api.moonshot.cn/v1/chat/completions "HTTP/1.1 200 OK"
+🎯 意图类型: detail
+🤖 智能分析查询...
+2026-11-01 18:39:33,691 - httpx - INFO - HTTP Request: POST https://api.moonshot.cn/v1/chat/completions "HTTP/1.1 200 OK"
+2026-11-01 18:39:33,692 - kb_modules.dialogue - INFO - 查询无需重写: '劳务派遣只能用在什么岗位?'
+应用过滤条件: {'domain': '劳务派遣'}
+2026-11-01 18:39:33,707 - kb_modules.retrieval - INFO - RRF重排完成: 向量0 + BM250 -> 合并0个法条块
+🔍 未命中相关法条
+[17] GT✓ 检索✓(第六十六条) 引用✗  —— 劳务派遣只能用在什么岗位?
+2026-11-01 18:39:53,724 - kb_modules.retrieval - INFO - RRF重排完成: 向量10 + BM2510 -> 合并12个法条块
+
+❓ 用户问题: 用人单位单方解除劳动合同需要通知工会吗?  [角色: legal]
+2026-11-01 18:40:21,536 - httpx - INFO - HTTP Request: POST https://api.moonshot.cn/v1/chat/completions "HTTP/1.1 200 OK"
+🎯 意图类型: detail
+🤖 智能分析查询...
+2026-11-01 18:40:27,037 - httpx - INFO - HTTP Request: POST https://api.moonshot.cn/v1/chat/completions "HTTP/1.1 200 OK"
+2026-11-01 18:40:27,041 - kb_modules.dialogue - INFO - 查询无需重写: '用人单位单方解除劳动合同需要通知工会吗?'
+应用过滤条件: {'domain': '劳动合同'}
+2026-11-01 18:40:27,058 - kb_modules.retrieval - INFO - RRF重排完成: 向量10 + BM255 -> 合并10个法条块
+🔍 命中 5 条法规: 《中华人民共和国劳动合同法》第四十三条, 《中华人民共和国劳动合同法》第三十七条, 《中华人民共和国劳动法》第三十条, 《中华人民共和国劳动法》第三十一条, 《中华人民共和国劳动法》第三十二条
+✍️ 生成合规回答...
+2026-11-01 18:40:32,070 - openai._base_client - INFO - Retrying request to /chat/completions in 0.392928 seconds
+2026-11-01 18:41:13,587 - httpx - INFO - HTTP Request: POST https://api.moonshot.cn/v1/chat/completions "HTTP/1.1 200 OK"
+[18] GT✓ 检索✓(第四十三条) 引用✓(第四十三条)  —— 用人单位单方解除劳动合同需要通知工会吗?
+2026-11-01 18:41:33,620 - kb_modules.retrieval - INFO - RRF重排完成: 向量10 + BM2510 -> 合并15个法条块
+
+❓ 用户问题: 哪些情形下用人单位不得解除劳动合同?  [角色: hr]
+2026-11-01 18:41:46,225 - httpx - INFO - HTTP Request: POST https://api.moonshot.cn/v1/chat/completions "HTTP/1.1 200 OK"
+🎯 意图类型: list
+应用过滤条件: {'domain': '劳动合同'}
+2026-11-01 18:41:46,241 - kb_modules.retrieval - INFO - RRF重排完成: 向量10 + BM259 -> 合并14个法条块
+🔍 命中 5 条法规: 《中华人民共和国劳动合同法》第三十八条, 《中华人民共和国劳动合同法》第二十一条, 《中华人民共和国劳动法》第三十二条, 《中华人民共和国劳动法》第二十九条, 《中华人民共和国劳动合同法实施条例》第十八条
+📋 生成条款清单...
+[19] GT✓ 检索✓(第二十九条) 引用✓(第二十九条)  —— 哪些情形下用人单位不得解除劳动合同?
+2026-11-01 18:42:06,258 - kb_modules.retrieval - INFO - RRF重排完成: 向量10 + BM2510 -> 合并13个法条块
+
+❓ 用户问题: 工伤认定申请要在多长时间内提出?  [角色: hr]
+2026-11-01 18:42:21,333 - httpx - INFO - HTTP Request: POST https://api.moonshot.cn/v1/chat/completions "HTTP/1.1 200 OK"
+🎯 意图类型: detail
+🤖 智能分析查询...
+2026-11-01 18:42:30,498 - httpx - INFO - HTTP Request: POST https://api.moonshot.cn/v1/chat/completions "HTTP/1.1 200 OK"
+2026-11-01 18:42:30,503 - kb_modules.dialogue - INFO - 查询无需重写: '工伤认定申请要在多长时间内提出?'
+2026-11-01 18:42:30,520 - kb_modules.retrieval - INFO - RRF重排完成: 向量10 + BM2510 -> 合并13个法条块
+🔍 命中 5 条法规: 《工伤保险条例》第十七条, 《工伤保险条例》第二十条, 《工伤保险条例》第十八条, 《最高人民法院关于审理工伤保险行政案件若干问题的规定》第七条, 《工伤保险条例》第十四条
+✍️ 生成合规回答...
+2026-11-01 18:43:16,764 - httpx - INFO - HTTP Request: POST https://api.moonshot.cn/v1/chat/completions "HTTP/1.1 200 OK"
+[20] GT✓ 检索✓(第十七条) 引用✓(第十七条)  —— 工伤认定申请要在多长时间内提出?
+
+------------------------------------------------------------------------
+ground-truth 存在性: 20/20  (100%)
+检索召回 (top-5):   20/20  (100%)
+引用准确率:         19/20  (95%)
+
+------------------------------------------------------------------------
+越界 guardrail 检查:
+2026-11-01 18:43:23,099 - httpx - INFO - HTTP Request: POST https://api.moonshot.cn/v1/chat/completions "HTTP/1.1 200 OK"
+  [拦截✓] route=out_of_scope  —— 帮我写一首关于春天的诗
+2026-11-01 18:44:01,048 - httpx - INFO - HTTP Request: POST https://api.moonshot.cn/v1/chat/completions "HTTP/1.1 200 OK"
+  [未拦截✗] route=general  —— 公司股权激励的税务筹划怎么做?
+========================================================================
