@@ -1,6 +1,10 @@
 # 大原始数据文件
 hr_compliance_rag/data
 
+# vite文件
+dist
+node_modules
+
 # python缓存
 __pycache__/
 *.pyc
