@@ -17,6 +17,8 @@ dist/
 .DS_Store
 *.log
 .env*
+!.env.example    
+# !开头表示不要忽略
 
 backend/.venv/
 backend/__pycache__/

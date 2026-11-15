@@ -1,4 +1,6 @@
 import uuid
+import os
+from dotenv import load_dotenv
 from fastapi import FastAPI, Request, Response
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
@@ -7,14 +9,15 @@ from snownlp import SnowNLP
 from storage import get_history, save_record, init_db
 from datetime import datetime, timezone
 
-
+load_dotenv() 
+ALLOWED_ORIGINS = os.getenv("ALLOWED_ORIGINS").split(",")
 
 app = FastAPI()
 init_db()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=ALLOWED_ORIGINS,
     allow_methods=["GET", "POST"],
     allow_credentials=True,             # ← 跨源前端带Cookie
 )
